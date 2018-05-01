@@ -19602,6 +19602,7 @@ in
 
   stumpwm = callPackage ../applications/window-managers/stumpwm {
     version = "latest";
+    sbcl = wrapLisp sbcl;
   };
 
   stumpwm-git = stumpwm.override {

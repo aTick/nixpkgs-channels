@@ -1,0 +1,32 @@
+diff --git a/load-stumpwm.lisp.in b/load-stumpwm.lisp.in
+index 6a81333..139d4bc 100644
+--- a/load-stumpwm.lisp.in
++++ b/load-stumpwm.lisp.in
+@@ -25,9 +25,23 @@
+     (error "Quicklisp must be installed in order to build StumpWM with ~S."
+            (lisp-implementation-type))))
+ 
+-(asdf:initialize-source-registry
+- '(:source-registry
+-   (:directory "@STUMPWM_ASDF_DIR@")
+-   :inherit-configuration))
++(write asdf:*source-registry-parameter* :stream *standard-output*)
++
++(let ((stumpwm-asdf-dir (list :directory "@STUMPWM_ASDF_DIR@")))
++  (if (and (asdf/source-registry:source-registry-initialized-p)
++           (not (null asdf:*source-registry-parameter*)))
++      (let* ((source-registry-parameter (copy-seq asdf:*source-registry-parameter*))
++             (source-registry-update-cons (member :inherit-configuration source-registry-parameter)))
++        (asdf:initialize-source-registry
++         (progn
++           (if source-registry-update-cons
++               (rplaca (rplacd source-registry-update-cons (copy-seq source-registry-update-cons))
++                       stumpwm-asdf-dir)
++               (rplacd (last source-registry-update-cons) stumpwm-asdf-dir))
++           source-registry-parameter)))
++      (asdf:initialize-source-registry
++       `(:source-registry
++         ,stumpwm-asdf-dir
++         :inherit-configuration))))
+ 
+ (asdf:oos 'asdf:load-op 'stumpwm)

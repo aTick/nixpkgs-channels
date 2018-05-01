@@ -14,7 +14,7 @@ let
       name = "1.0.0";
       rev = "refs/tags/1.0.0";
       sha256 = "16r0lwhxl8g71masmfbjr7s7m7fah4ii4smi1g8zpbpiqjz48ryb";
-      patches = [];
+      patches = [ ./load-stumpwm.lisp.in.patch ];
     };
     "0.9.9" = {
       name = "0.9.9";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     ./autogen.sh
-    ./configure --prefix=$out --with-module-dir=$out/share/stumpwm/modules
+    ./configure --prefix=$out --with-module-dir=$out/share/stumpwm/modules --with-sbcl=${sbcl.outPath}/bin/common-lisp.sh
   '';
 
   preBuild = ''
@@ -99,6 +99,5 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ the-kenny ];
     platforms   = platforms.linux;
-    broken = true; # 2018-04-11
   };
 }
