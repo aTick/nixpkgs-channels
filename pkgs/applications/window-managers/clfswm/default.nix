@@ -5,9 +5,10 @@ stdenv.mkDerivation rec {
   name = "clfswm";
 
   src = fetchgit {
-    url = "https://gitlab.common-lisp.net/clfswm/clfswm.git";
-    rev = "refs/heads/master";
+    url = "file:///tmp/clfswm/";
+    rev = "a06c26873a3f35aa28ed6efccf3145c3575fa130";
     sha256 = "0hynzh3a1zr719cxfb0k4cvh5lskzs616hwn7p942isyvhwzhynd";
+    deepClone = true;
   };
 
   buildInputs = [
